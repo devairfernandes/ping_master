@@ -282,6 +282,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   bool _isMonitoring = true;
   String _appVersion = 'v1.0.0'; // Fallback
   bool _isUsingDemoData = false;
+  String _lastError = '';
 
   @override
   void initState() {
@@ -454,9 +455,18 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   Future<void> _fetchData() async {
     try {
+      // Limpar a URL para evitar protocolos duplicados
+      String cleanUrl = _currentServerUrl.trim();
+      if (cleanUrl.startsWith('http://')) cleanUrl = cleanUrl.substring(7);
+      if (cleanUrl.startsWith('https://')) cleanUrl = cleanUrl.substring(8);
+
+      final url = 'http://$cleanUrl/api/v1/status';
+      debugPrint('Tentando conectar em: $url');
+
       final response = await http
-          .get(Uri.parse('http://$_currentServerUrl/api/v1/status'))
-          .timeout(const Duration(seconds: 7));
+          .get(Uri.parse(url))
+          .timeout(const Duration(seconds: 10));
+
       if (response.statusCode == 200) {
         final List<dynamic> data = json.decode(response.body);
         if (mounted) {
@@ -464,18 +474,28 @@ class _DashboardScreenState extends State<DashboardScreen> {
             _services = data.map((m) => ServicePing.fromJson(m)).toList();
             _isLoading = false;
             _isUsingDemoData = false;
+            _lastError = '';
             _lastGlobalUpdate = DateFormat('HH:mm:ss').format(DateTime.now());
           });
         }
       } else {
-        _useFallback();
+        _useFallback(
+          'Erro ${response.statusCode}: Servidor respondeu, mas não encontrou os dados.',
+        );
       }
     } catch (e) {
-      _useFallback();
+      String msg = e.toString();
+      if (msg.contains('Timeout'))
+        msg = 'O servidor demorou muito para responder (Timeout).';
+      if (msg.contains('Connection refused'))
+        msg = 'Conexão recusada: O servidor está ativo no IP/Porta informado?';
+      if (msg.contains('HandshakeException'))
+        msg = 'Erro de protocolo seguro (SSL).';
+      _useFallback(msg);
     }
   }
 
-  void _useFallback() {
+  void _useFallback([String? error]) {
     final List<Map<String, dynamic>> mockData = [
       {
         'name': 'Discord',
@@ -539,6 +559,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
         _services = mockData.map((m) => ServicePing.fromJson(m)).toList();
         _isLoading = false;
         _isUsingDemoData = true;
+        if (error != null) _lastError = error;
         _lastGlobalUpdate = DateFormat('HH:mm:ss').format(DateTime.now());
       });
     }
@@ -587,7 +608,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 const Text(
-                                  'MODO DEMONSTRAÇÃO (OFFLINE)',
+                                  'MODO DEMONSTRAÇÃO (SISTEMA OFFLINE)',
                                   style: TextStyle(
                                     color: Colors.redAccent,
                                     fontWeight: FontWeight.bold,
@@ -595,11 +616,23 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                     letterSpacing: 1.2,
                                   ),
                                 ),
+                                if (_lastError.isNotEmpty)
+                                  Padding(
+                                    padding: const EdgeInsets.only(top: 4.0),
+                                    child: Text(
+                                      'RAZÃO: $_lastError',
+                                      style: const TextStyle(
+                                        color: Colors.white70,
+                                        fontSize: 9,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
                                 Text(
-                                  'Não foi possível conectar ao servidor $_currentServerUrl',
+                                  'URL Tentada: http://$_currentServerUrl/api/v1/status',
                                   style: const TextStyle(
                                     color: Colors.white38,
-                                    fontSize: 9,
+                                    fontSize: 8,
                                   ),
                                 ),
                               ],
