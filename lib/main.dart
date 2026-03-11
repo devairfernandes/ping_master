@@ -284,6 +284,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
       );
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
+        debugPrint(
+          'OTA Check: Local=$currentVersion, Server=${data['version']}',
+        );
         if (data['version'] != currentVersion && mounted) {
           _showUpdateDialog(
             data['version'],
