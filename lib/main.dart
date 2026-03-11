@@ -280,6 +280,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
   Timer? _timer;
   String _lastGlobalUpdate = '--:--:--';
   bool _isMonitoring = true;
+  String _appVersion = 'v1.0.0'; // Fallback
+  bool _isUsingDemoData = false;
 
   @override
   void initState() {
@@ -298,6 +300,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
     try {
       final packageInfo = await PackageInfo.fromPlatform();
       final currentVersion = packageInfo.version;
+      if (mounted) setState(() => _appVersion = 'v$currentVersion');
+
       final timestamp = DateTime.now().millisecondsSinceEpoch;
       final response = await http.get(
         Uri.parse(
@@ -452,13 +456,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
     try {
       final response = await http
           .get(Uri.parse('http://$_currentServerUrl/api/v1/status'))
-          .timeout(const Duration(seconds: 3));
+          .timeout(const Duration(seconds: 7));
       if (response.statusCode == 200) {
         final List<dynamic> data = json.decode(response.body);
         if (mounted) {
           setState(() {
             _services = data.map((m) => ServicePing.fromJson(m)).toList();
             _isLoading = false;
+            _isUsingDemoData = false;
             _lastGlobalUpdate = DateFormat('HH:mm:ss').format(DateTime.now());
           });
         }
@@ -533,6 +538,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       setState(() {
         _services = mockData.map((m) => ServicePing.fromJson(m)).toList();
         _isLoading = false;
+        _isUsingDemoData = true;
         _lastGlobalUpdate = DateFormat('HH:mm:ss').format(DateTime.now());
       });
     }
@@ -552,6 +558,57 @@ class _DashboardScreenState extends State<DashboardScreen> {
               slivers: [
                 // Barra de botões secundária para não poluir o topo
                 SliverToBoxAdapter(child: _buildActionRow()),
+
+                if (_isUsingDemoData)
+                  SliverToBoxAdapter(
+                    child: Container(
+                      margin: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 8,
+                      ),
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: Colors.redAccent.withOpacity(0.1),
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(
+                          color: Colors.redAccent.withOpacity(0.3),
+                        ),
+                      ),
+                      child: Row(
+                        children: [
+                          const Icon(
+                            Icons.cloud_off_rounded,
+                            color: Colors.redAccent,
+                            size: 16,
+                          ),
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Text(
+                                  'MODO DEMONSTRAÇÃO (OFFLINE)',
+                                  style: TextStyle(
+                                    color: Colors.redAccent,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 10,
+                                    letterSpacing: 1.2,
+                                  ),
+                                ),
+                                Text(
+                                  'Não foi possível conectar ao servidor $_currentServerUrl',
+                                  style: const TextStyle(
+                                    color: Colors.white38,
+                                    fontSize: 9,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
 
                 // Cards de resumo ajustados
                 SliverPadding(
@@ -610,7 +667,22 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     ),
                   ),
                 ),
-                const SliverToBoxAdapter(child: SizedBox(height: 40)),
+                SliverToBoxAdapter(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 20),
+                    child: Center(
+                      child: Text(
+                        'Ping Master $_appVersion',
+                        style: const TextStyle(
+                          color: Colors.white10,
+                          fontSize: 10,
+                          letterSpacing: 2,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                const SliverToBoxAdapter(child: SizedBox(height: 20)),
               ],
             ),
     );

@@ -1,6 +1,6 @@
 {
-    "version": "1.0.3",
-    "build_number": 4,
-    "url": "https://github.com/devairfernandes/ping_master/releases/download/v1.0.3/app-arm64-v8a-release.apk",
-    "changelog": "Versão 1.0.3: Persistência da URL do servidor (o app agora lembra do seu último servidor usado)."
+    "version": "1.0.4",
+    "build_number": 5,
+    "url": "https://github.com/devairfernandes/ping_master/releases/download/v1.0.4/app-arm64-v8a-release.apk",
+    "changelog": "Versão 1.0.4: Indicador de Modo Offline (Demo) e aumento de timeout de conexão para 7 segundos."
 }
