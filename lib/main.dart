@@ -283,6 +283,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   String _appVersion = 'v1.0.0'; // Fallback
   bool _isUsingDemoData = false;
   String _lastError = '';
+  bool _isFetching = false;
 
   @override
   void initState() {
@@ -454,11 +455,17 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   Future<void> _fetchData() async {
+    if (_isFetching) return;
+    _isFetching = true;
+
     try {
-      // Limpar a URL para evitar protocolos duplicados
+      // Limpar a URL para evitar protocolos duplicados e barras extras
       String cleanUrl = _currentServerUrl.trim();
-      if (cleanUrl.startsWith('http://')) cleanUrl = cleanUrl.substring(7);
-      if (cleanUrl.startsWith('https://')) cleanUrl = cleanUrl.substring(8);
+      while (cleanUrl.startsWith('http://')) cleanUrl = cleanUrl.substring(7);
+      while (cleanUrl.startsWith('https://')) cleanUrl = cleanUrl.substring(8);
+      while (cleanUrl.endsWith('/')) {
+        cleanUrl = cleanUrl.substring(0, cleanUrl.length - 1);
+      }
 
       final url = 'http://$cleanUrl/api/v1/status';
       debugPrint('Tentando conectar em: $url');
@@ -480,18 +487,31 @@ class _DashboardScreenState extends State<DashboardScreen> {
         }
       } else {
         _useFallback(
-          'Erro ${response.statusCode}: Servidor respondeu, mas não encontrou os dados.',
+          'Erro ${response.statusCode}: Servidor respondeu, mas não enviou os dados.',
         );
       }
     } catch (e) {
       String msg = e.toString();
       if (msg.contains('Timeout'))
-        msg = 'O servidor demorou muito para responder (Timeout).';
+        msg = 'Timeout (O servidor demorou mais de 10s para responder).';
       if (msg.contains('Connection refused'))
-        msg = 'Conexão recusada: O servidor está ativo no IP/Porta informado?';
-      if (msg.contains('HandshakeException'))
-        msg = 'Erro de protocolo seguro (SSL).';
+        msg = 'Conexão recusada: Verifique se o IP:PORTA está correto.';
+
+      // Teste rápido para ver se tem internet geral
+      try {
+        final google = await http
+            .get(Uri.parse('http://google.com'))
+            .timeout(const Duration(seconds: 4));
+        if (google.statusCode >= 200 && google.statusCode < 400) {
+          msg = 'Sua Internet: OK | Servidor Ouromax: INDISPONÍVEL ($msg)';
+        }
+      } catch (_) {
+        msg = 'Sua Internet: OFF | Verifique sua conexão ($msg)';
+      }
+
       _useFallback(msg);
+    } finally {
+      _isFetching = false;
     }
   }
 
