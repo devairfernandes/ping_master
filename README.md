@@ -62,6 +62,7 @@ flutter run
 ---
 
 ## 📜 Histórico de Versões
+- **v1.0.4:** Modo Offline (Demo) e melhorias de Timeout.
 - **v1.0.3:** Adicionada persistência de URL (SharedPreferences).
 - **v1.0.2:** Nova logo premium e ajustes finos de UI.
 - **v1.0.1:** Implementação completa do sistema de atualização OTA.
