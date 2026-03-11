@@ -151,6 +151,8 @@ class _LoginScreenState extends State<LoginScreen> {
         children: [
           TextField(
             controller: _urlController,
+            keyboardType: TextInputType.url,
+            autofocus: false,
             style: const TextStyle(color: Colors.white, fontSize: 16),
             decoration: InputDecoration(
               labelText: 'SERVIDOR IP:PORTA',
@@ -159,8 +161,18 @@ class _LoginScreenState extends State<LoginScreen> {
                 fontSize: 11,
                 fontWeight: FontWeight.bold,
               ),
+              hintText: 'ex: 192.168.1.10:5000',
+              hintStyle: const TextStyle(color: Colors.white12),
               filled: true,
               fillColor: Colors.black,
+              suffixIcon: IconButton(
+                icon: const Icon(
+                  Icons.clear_rounded,
+                  color: Colors.white24,
+                  size: 18,
+                ),
+                onPressed: () => _urlController.clear(),
+              ),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12),
                 borderSide: BorderSide.none,
@@ -240,6 +252,7 @@ class DashboardScreen extends StatefulWidget {
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
+  late String _currentServerUrl;
   List<ServicePing> _services = [];
   bool _isLoading = true;
   Timer? _timer;
@@ -249,6 +262,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   @override
   void initState() {
     super.initState();
+    _currentServerUrl = widget.serverUrl;
     _fetchData();
     _timer = Timer.periodic(const Duration(seconds: 5), (timer) {
       if (_isMonitoring) _fetchData();
@@ -412,7 +426,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   Future<void> _fetchData() async {
     try {
       final response = await http
-          .get(Uri.parse('http://${widget.serverUrl}/api/v1/status'))
+          .get(Uri.parse('http://$_currentServerUrl/api/v1/status'))
           .timeout(const Duration(seconds: 3));
       if (response.statusCode == 200) {
         final List<dynamic> data = json.decode(response.body);
@@ -600,12 +614,72 @@ class _DashboardScreenState extends State<DashboardScreen> {
       ),
       actions: [
         IconButton(
+          onPressed: _showEditServerDialog,
+          icon: const Icon(
+            Icons.settings_input_component_rounded,
+            color: Color(0xFF00E676),
+            size: 18,
+          ),
+          tooltip: 'Editar Servidor',
+        ),
+        IconButton(
           onPressed: () => Navigator.of(context).pushReplacement(
             MaterialPageRoute(builder: (c) => const LoginScreen()),
           ),
           icon: const Icon(Icons.logout_rounded, color: Colors.white54),
         ),
       ],
+    );
+  }
+
+  void _showEditServerDialog() {
+    final controller = TextEditingController(text: _currentServerUrl);
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        backgroundColor: const Color(0xFF0F0F0F),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        title: Text(
+          'Configurar Servidor',
+          style: GoogleFonts.outfit(color: const Color(0xFF00E676)),
+        ),
+        content: TextField(
+          controller: controller,
+          autofocus: true,
+          style: const TextStyle(color: Colors.white),
+          decoration: const InputDecoration(
+            labelText: 'NOVO IP:PORTA',
+            labelStyle: TextStyle(color: Colors.white38, fontSize: 12),
+            enabledBorder: UnderlineInputBorder(
+              borderSide: BorderSide(color: Color(0xFF00E676)),
+            ),
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text(
+              'CANCELAR',
+              style: TextStyle(color: Colors.white24),
+            ),
+          ),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: const Color(0xFF00E676),
+              foregroundColor: Colors.black,
+            ),
+            onPressed: () {
+              setState(() {
+                _currentServerUrl = controller.text;
+                _isLoading = true;
+              });
+              Navigator.pop(context);
+              _fetchData();
+            },
+            child: const Text('SALVAR'),
+          ),
+        ],
+      ),
     );
   }
 
