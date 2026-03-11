@@ -1,6 +1,6 @@
 {
-    "version": "1.0.5",
-    "build_number": 6,
-    "url": "https://github.com/devairfernandes/ping_master/releases/download/v1.0.5/app-arm64-v8a-release.apk",
-    "changelog": "- Novo: Diagnóstico de internet no banner offline.\n- Correção: Travamento em conexões instáveis.\n- Melhoria: Normalização inteligente de URL."
+    "version": "1.0.6",
+    "build_number": 7,
+    "url": "https://github.com/devairfernandes/ping_master/releases/download/v1.0.6/app-arm64-v8a-release.apk",
+    "changelog": "- Novo: Modo Navegador (WebView) para visualização direta do painel HTML.\n- Melhoria: Flexibilidade para usar qualquer URL ou IP como dashboard.\n- Recurso: Botão para alternar entre visualização Nativa e Web."
 }
