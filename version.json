@@ -1,6 +1,6 @@
 {
-    "version": "1.0.0",
-    "build_number": 1,
-    "url": "https://github.com/devairfernandes/ping_master/releases/download/v1.0.0/app-arm64-v8a-release.apk",
-    "changelog": "Versão inicial estável com monitoramento Ouromax-BL10 e sistema OTA."
+    "version": "1.0.1",
+    "build_number": 2,
+    "url": "https://github.com/devairfernandes/ping_master/releases/download/v1.0.1/ping_master_v1.0.1.apk",
+    "changelog": "Versão 1.0.1: Implementação completa do sistema OTA, progresso de download e permissões de instalação."
 }

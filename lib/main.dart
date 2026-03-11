@@ -1,11 +1,15 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:dio/dio.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:open_filex/open_filex.dart';
 
 void main() {
   runApp(const PingMasterApp());
@@ -324,14 +328,79 @@ class _DashboardScreenState extends State<DashboardScreen> {
               backgroundColor: const Color(0xFF00E676),
               foregroundColor: Colors.black,
             ),
-            onPressed: () => Navigator.pop(
-              context,
-            ), // Implementar download real se necessário
+            onPressed: () {
+              Navigator.pop(context);
+              _executeUpdate(url);
+            },
             child: const Text('ATUALIZAR'),
           ),
         ],
       ),
     );
+  }
+
+  void _executeUpdate(String url) async {
+    try {
+      final progressNotifier = ValueNotifier<double>(0);
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (ctx) => AlertDialog(
+          backgroundColor: const Color(0xFF161616),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(24),
+          ),
+          title: Text(
+            'Baixando...',
+            style: GoogleFonts.outfit(fontWeight: FontWeight.bold),
+          ),
+          content: ValueListenableBuilder<double>(
+            valueListenable: progressNotifier,
+            builder: (ctx, prog, child) => Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                LinearProgressIndicator(
+                  value: prog,
+                  minHeight: 10,
+                  valueColor: const AlwaysStoppedAnimation<Color>(
+                    Color(0xFF00E676),
+                  ),
+                ),
+                const SizedBox(height: 16),
+                Text(
+                  '${(prog * 100).toStringAsFixed(0)}%',
+                  style: GoogleFonts.outfit(fontWeight: FontWeight.bold),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+      final dir =
+          await getExternalStorageDirectory() ??
+          await getApplicationDocumentsDirectory();
+      final savePath = '${dir.path}/ping_master_update.apk';
+      final file = File(savePath);
+      if (await file.exists()) await file.delete();
+      final dio = Dio();
+      await dio.download(
+        url,
+        savePath,
+        onReceiveProgress: (received, total) {
+          if (total > 0) progressNotifier.value = received / total;
+        },
+      );
+      if (mounted) Navigator.of(context).pop();
+      await OpenFilex.open(
+        savePath,
+        type: 'application/vnd.android.package-archive',
+      );
+    } catch (e) {
+      if (mounted) Navigator.of(context).pop();
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Erro ao atualizar: $e')));
+    }
   }
 
   @override
