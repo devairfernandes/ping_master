@@ -10,6 +10,7 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:dio/dio.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:open_filex/open_filex.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   runApp(const PingMasterApp());
@@ -55,8 +56,29 @@ class _LoginScreenState extends State<LoginScreen> {
   );
   bool _isConnecting = false;
 
+  @override
+  void initState() {
+    super.initState();
+    _loadSavedUrl();
+  }
+
+  Future<void> _loadSavedUrl() async {
+    final prefs = await SharedPreferences.getInstance();
+    final savedUrl = prefs.getString('server_url');
+    if (savedUrl != null && savedUrl.isNotEmpty) {
+      setState(() {
+        _urlController.text = savedUrl;
+      });
+    }
+  }
+
   void _connect() async {
     setState(() => _isConnecting = true);
+
+    // Salvar URL para a próxima vez
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('server_url', _urlController.text);
+
     await Future.delayed(const Duration(milliseconds: 800));
     if (mounted) {
       Navigator.of(context).pushReplacement(
@@ -671,12 +693,16 @@ class _DashboardScreenState extends State<DashboardScreen> {
               backgroundColor: const Color(0xFF00E676),
               foregroundColor: Colors.black,
             ),
-            onPressed: () {
+            onPressed: () async {
+              final newUrl = controller.text;
+              final prefs = await SharedPreferences.getInstance();
+              await prefs.setString('server_url', newUrl);
+
               setState(() {
-                _currentServerUrl = controller.text;
+                _currentServerUrl = newUrl;
                 _isLoading = true;
               });
-              Navigator.pop(context);
+              if (mounted) Navigator.pop(context);
               _fetchData();
             },
             child: const Text('SALVAR'),

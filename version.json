@@ -1,6 +1,6 @@
 {
-    "version": "1.0.2",
-    "build_number": 3,
-    "url": "https://github.com/devairfernandes/ping_master/releases/download/v1.0.2/app-arm64-v8a-release.apk",
-    "changelog": "Versão 1.0.2: Nova identidade visual com logo premium e melhorias de estabilidade."
+    "version": "1.0.3",
+    "build_number": 4,
+    "url": "https://github.com/devairfernandes/ping_master/releases/download/v1.0.3/app-arm64-v8a-release.apk",
+    "changelog": "Versão 1.0.3: Persistência da URL do servidor (o app agora lembra do seu último servidor usado)."
 }
