@@ -38,11 +38,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
   bool _isUsingDemoData = false;
   String _lastError = '';
   bool _isFetching = false;
+  String _systemName = 'Ping Master Pro';
 
   @override
   void initState() {
     super.initState();
     _currentServerUrl = widget.serverUrl;
+    _loadSavedSystemName();
     _fetchData();
     _timer = Timer.periodic(const Duration(seconds: 3), (timer) {
       _fetchData();
@@ -197,6 +199,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
     }
   }
 
+  Future<void> _loadSavedSystemName() async {
+    final prefs = await SharedPreferences.getInstance();
+    final savedName = prefs.getString('system_name');
+    if (savedName != null && mounted) {
+      setState(() => _systemName = savedName);
+    }
+  }
+
   @override
   void dispose() {
     _timer?.cancel();
@@ -231,6 +241,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
             _services = servicesData
                 .map((m) => ServicePing.fromJson(m))
                 .toList();
+            _isMonitoring = decoded['monitoring_active'] ?? _isMonitoring;
+            _systemName = decoded['system_name'] ?? _systemName;
+            _saveSystemName(_systemName);
             _isLoading = false;
             _isUsingDemoData = false;
             _lastError = '';
@@ -245,6 +258,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
     } finally {
       if (mounted) setState(() => _isFetching = false);
     }
+  }
+
+  Future<void> _saveSystemName(String name) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('system_name', name);
   }
 
   void _useFallback([String? error]) {
@@ -404,7 +422,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'DASHBOARD NATIVO',
+            _systemName.toUpperCase(),
             style: GoogleFonts.outfit(
               fontSize: 18,
               fontWeight: FontWeight.w900,

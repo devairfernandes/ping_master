@@ -18,6 +18,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _apiKeyController = TextEditingController();
   bool _isConnecting = false;
   List<Map<String, String>> _recentServers = [];
+  String _systemName = "PING MASTER";
 
   @override
   void initState() {
@@ -52,6 +53,14 @@ class _LoginScreenState extends State<LoginScreen> {
           .map((s) => Map<String, String>.from(json.decode(s)))
           .toList();
     });
+
+    // Carregar nome do sistema
+    final savedName = prefs.getString('system_name');
+    if (savedName != null) {
+      setState(() {
+        _systemName = savedName.toUpperCase();
+      });
+    }
   }
 
   Future<void> _saveServer(String url, String apiKey) async {
@@ -167,7 +176,7 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
         const SizedBox(height: 24),
         Text(
-          'PING MASTER',
+          _systemName,
           style: GoogleFonts.outfit(
             fontSize: 32,
             fontWeight: FontWeight.w900,

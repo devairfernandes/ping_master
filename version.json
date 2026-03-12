@@ -1,6 +1,6 @@
 {
-    "version": "1.0.7",
-    "build_number": 8,
-    "url": "https://github.com/devairfernandes/ping_master/releases/download/v1.0.7/ping_master_v1.0.7_final.apk",
-    "changelog": "- Sincronização automática: O app detecta e sincroniza com o monitoramento do servidor instantaneamente.\n- Correção de Conflitos: Novo sistema de estado unificado no servidor (ping_state.py).\n- Melhoria de Estabilidade: Exibição inteligente de todos os hosts mesmo se estiverem offline.\n- Performance: Loop de atualização otimizado para 3 segundos."
+    "version": "1.0.8",
+    "build_number": 9,
+    "url": "https://github.com/devairfernandes/ping_master/releases/download/v1.0.8/ping_master_v1.0.8.apk",
+    "changelog": "- Branding Dinâmico: O app agora herda o nome da sua empresa definido no servidor.\n- Sincronização Inteligente: Nome da empresa sincronizado no Login, Dashboard Nativo e Web.\n- Persistência: O app lembra da última rede conectada mesmo offline.\n- Estética: Melhorias visuais e de performance no carregamento de dados."
 }

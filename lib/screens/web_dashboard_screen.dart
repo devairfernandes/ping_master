@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'dashboard_screen.dart';
 import 'login_screen.dart';
@@ -21,11 +22,13 @@ class WebDashboardScreen extends StatefulWidget {
 class _WebDashboardScreenState extends State<WebDashboardScreen> {
   late final WebViewController _controller;
   bool _isLoading = true;
-  String _appVersion = "v1.0.7";
+  String _appVersion = "v1.0.8";
+  String _systemName = "Ping Master Pro";
 
   @override
   void initState() {
     super.initState();
+    _loadSystemName();
     _initLibVersion();
 
     String finalUrl = widget.serverUrl.trim();
@@ -55,6 +58,14 @@ class _WebDashboardScreenState extends State<WebDashboardScreen> {
       ..loadRequest(Uri.parse(finalUrl));
   }
 
+  Future<void> _loadSystemName() async {
+    final prefs = await SharedPreferences.getInstance();
+    final savedName = prefs.getString('system_name');
+    if (savedName != null && mounted) {
+      setState(() => _systemName = savedName);
+    }
+  }
+
   Future<void> _initLibVersion() async {
     try {
       final packageInfo = await PackageInfo.fromPlatform();
@@ -75,7 +86,7 @@ class _WebDashboardScreenState extends State<WebDashboardScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              "DASHBOARD WEB",
+              "DASHBOARD WEB - ${_systemName.toUpperCase()}",
               style: GoogleFonts.outfit(
                 fontSize: 14,
                 fontWeight: FontWeight.w900,
@@ -139,7 +150,7 @@ class _WebDashboardScreenState extends State<WebDashboardScreen> {
         child: Row(
           children: [
             Text(
-              "PING MASTER $_appVersion",
+              "${_systemName.toUpperCase()} $_appVersion",
               style: const TextStyle(
                 color: Colors.white24,
                 fontSize: 10,
