@@ -1,6 +1,6 @@
 # <img src="assets/logo.png" width="40" height="40" /> Ping Master Pro
 
-![Version](https://img.shields.io/badge/version-1.0.7-00E676?style=for-the-badge)
+![Version](https://img.shields.io/badge/version-1.0.8-00E676?style=for-the-badge)
 ![Flutter](https://img.shields.io/badge/Flutter-02569B?style=for-the-badge&logo=flutter&logoColor=white)
 ![Android](https://img.shields.io/badge/Android-3DDC84?style=for-the-badge&logo=android&logoColor=white)
 
