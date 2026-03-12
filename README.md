@@ -4,7 +4,7 @@
 ![Flutter](https://img.shields.io/badge/Flutter-02569B?style=for-the-badge&logo=flutter&logoColor=white)
 ![Android](https://img.shields.io/badge/Android-3DDC84?style=for-the-badge&logo=android&logoColor=white)
 
-O **Ping Master** é um painel de monitoramento de rede de alta performance desenvolvido para técnicos e administradores que precisam de precisão em tempo real. Inspirado no ecossistema **Ouromax**, o app combina uma estética *Pure Black* premium com ferramentas robustas de análise de estabilidade.
+O **Ping Master** é um painel de monitoramento de rede de alta performance desenvolvido para técnicos e administradores que precisam de precisão em tempo real. Inspirado no ecossistema **Telecom**, o app combina uma estética *Pure Black* premium com ferramentas robustas de análise de estabilidade.
 
 ---
 
