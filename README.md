@@ -1,6 +1,6 @@
 # <img src="assets/logo.png" width="40" height="40" /> Ping Master - Ouromax
 
-![Version](https://img.shields.io/badge/version-1.0.6-00E676?style=for-the-badge)
+![Version](https://img.shields.io/badge/version-1.0.7-00E676?style=for-the-badge)
 ![Flutter](https://img.shields.io/badge/Flutter-02569B?style=for-the-badge&logo=flutter&logoColor=white)
 ![Android](https://img.shields.io/badge/Android-3DDC84?style=for-the-badge&logo=android&logoColor=white)
 
@@ -62,7 +62,8 @@ flutter run
 ---
 
 ## 📜 Histórico de Versões
-- **v1.0.4:** Modo Offline (Demo) e melhorias de Timeout.
+- **v1.0.7:** Sincronização unificada automática e correção de delay com `ping_state.py`.
+- **v1.0.6:** Modo Navegador (WebView) e visualização de dashboard dinâmico.
 - **v1.0.3:** Adicionada persistência de URL (SharedPreferences).
 - **v1.0.2:** Nova logo premium e ajustes finos de UI.
 - **v1.0.1:** Implementação completa do sistema de atualização OTA.

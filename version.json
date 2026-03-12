@@ -1,6 +1,6 @@
 {
-    "version": "1.0.6",
-    "build_number": 7,
-    "url": "https://github.com/devairfernandes/ping_master/releases/download/v1.0.6/app-arm64-v8a-release.apk",
-    "changelog": "- Novo: Modo Navegador (WebView) para visualização direta do painel HTML.\n- Melhoria: Flexibilidade para usar qualquer URL ou IP como dashboard.\n- Recurso: Botão para alternar entre visualização Nativa e Web."
+    "version": "1.0.7",
+    "build_number": 8,
+    "url": "https://github.com/devairfernandes/ping_master/releases/download/v1.0.7/ping_master_v1.0.7_final.apk",
+    "changelog": "- Sincronização automática: O app detecta e sincroniza com o monitoramento do servidor instantaneamente.\n- Correção de Conflitos: Novo sistema de estado unificado no servidor (ping_state.py).\n- Melhoria de Estabilidade: Exibição inteligente de todos os hosts mesmo se estiverem offline.\n- Performance: Loop de atualização otimizado para 3 segundos."
 }

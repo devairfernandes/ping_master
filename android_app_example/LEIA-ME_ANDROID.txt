@@ -1,0 +1,102 @@
+=====================================
+PING MASTER - APP ANDROID
+=====================================
+
+📱 PROJETO ANDROID STUDIO
+
+Este projeto transforma o Ping Master em app Android!
+
+=====================================
+PASSO A PASSO:
+=====================================
+
+1. INSTALAR ANDROID STUDIO
+   https://developer.android.com/studio
+
+2. CRIAR NOVO PROJETO
+   File → New → New Project
+   Template: Empty Activity
+   Nome: Ping Master
+   Package: com.devair.pingmaster
+   Linguagem: Java
+   SDK Mínimo: API 21
+
+3. COPIAR ARQUIVOS
+   MainActivity.java → app/src/main/java/com/devair/pingmaster/
+   activity_main.xml → app/src/main/res/layout/
+   AndroidManifest.xml → app/src/main/
+
+4. CONFIGURAR SEU IP
+   Abrir MainActivity.java
+   Linha 15: Trocar "192.168.1.100" pelo IP do seu PC
+   
+   Descobrir IP:
+   Windows: abrir CMD → ipconfig
+   Procurar: IPv4 Address
+   
+5. COMPILAR
+   Build → Build Bundle(s) / APK(s) → Build APK(s)
+   
+6. INSTALAR
+   APK em: app/build/outputs/apk/debug/app-debug.apk
+   Copiar para celular
+   Instalar
+
+=====================================
+REQUISITOS:
+=====================================
+
+✅ PC e celular no MESMO WiFi
+✅ Servidor Ping Master rodando no PC
+✅ Firewall liberado (porta 5000)
+✅ Android 5.0 ou superior
+
+=====================================
+CONFIGURAR SERVIDOR:
+=====================================
+
+No app_simple.py, mudar:
+
+if __name__ == '__main__':
+    app.run(
+        host='0.0.0.0',  # Aceita conexões externas
+        port=5000,
+        debug=False
+    )
+
+Liberar firewall:
+Painel de Controle → Firewall → Permitir porta 5000
+
+=====================================
+TESTAR:
+=====================================
+
+1. Iniciar servidor no PC
+2. Descobrir IP do PC (ex: 192.168.1.100)
+3. Abrir navegador no celular
+4. Digitar: http://192.168.1.100:5000
+5. Se funciona, o app também funcionará!
+
+=====================================
+DÚVIDAS COMUNS:
+=====================================
+
+P: Não conecta
+R: Verifique se:
+   - PC e celular no mesmo WiFi
+   - IP está correto
+   - Servidor está rodando
+   - Firewall liberado
+
+P: Como usar fora de casa?
+R: Use Ngrok ou Cloudflare Tunnel
+   (Ver GUIA_APP_ANDROID.md)
+
+P: Como publicar na Play Store?
+R: Gerar APK assinado
+   Criar conta desenvolvedor ($25)
+   Seguir processo de publicação
+
+=====================================
+
+Desenvolvido por Devair Fernandes
