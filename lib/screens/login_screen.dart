@@ -13,7 +13,7 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _urlController = TextEditingController(
-    text: 'pingplotter10.ouromax.com:5000',
+    text: '0.0.0.0:5000',
   );
   final TextEditingController _apiKeyController = TextEditingController();
   bool _isConnecting = false;
@@ -176,7 +176,7 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
         ),
         Text(
-          'OUROMAX CONNECT',
+          'MASTER CONNECT',
           style: GoogleFonts.outfit(
             color: Colors.white38,
             fontSize: 12,

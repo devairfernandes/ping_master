@@ -1,10 +1,10 @@
-# <img src="assets/logo.png" width="40" height="40" /> Ping Master 
+# <img src="assets/logo.png" width="40" height="40" /> Ping Master Pro
 
 ![Version](https://img.shields.io/badge/version-1.0.7-00E676?style=for-the-badge)
 ![Flutter](https://img.shields.io/badge/Flutter-02569B?style=for-the-badge&logo=flutter&logoColor=white)
 ![Android](https://img.shields.io/badge/Android-3DDC84?style=for-the-badge&logo=android&logoColor=white)
 
-O **Ping Master** é um painel de monitoramento de rede de alta performance desenvolvido para técnicos e administradores que precisam de precisão em tempo real. Inspirado no ecossistema **Telecom**, o app combina uma estética *Pure Black* premium com ferramentas robustas de análise de estabilidade.
+O **Ping Master Pro** é um painel de monitoramento de rede de alta performance desenvolvido para técnicos e administradores que precisam de precisão em tempo real. O app combina uma estética *Pure Black* premium com ferramentas robustas de análise de estabilidade.
 
 ---
 
@@ -21,9 +21,19 @@ O **Ping Master** é um painel de monitoramento de rede de alta performance dese
 
 ## 📸 Screenshots
 
-| Tela de Entrada | Dashboard Principal |
+### 📱 Aplicativo Mobile
+| Tela de Entrada (Login) | Dashboard Nativo |
 | :---: | :---: |
-| <img src="https://raw.githubusercontent.com/devairfernandes/ping_master/main/assets/logo.png" width="200" /> | *(Placeholder para Screenshot)* |
+| <img src="assets/screenshots/mobile_login.jpg" width="250" /> | <img src="assets/screenshots/mobile_dashboard.jpg" width="250" /> |
+
+### 💻 Painel Web & Ferramentas
+| Dashboard Web Profissional |
+| :---: |
+| <img src="assets/screenshots/web_dashboard.png" width="800" /> |
+
+| Análise de Qualidade | Traceroute (Rota) |
+| :---: | :---: |
+| <img src="assets/screenshots/quality_analysis.png" width="400" /> | <img src="assets/screenshots/traceroute.png" width="400" /> |
 
 ---
 
@@ -77,4 +87,4 @@ flutter run
 📍 Brasil
 
 ---
-*Este projeto é parte da suíte de ferramentas Ouromax para infraestrutura de rede.*
+*Este projeto é uma ferramenta profissional para infraestrutura de rede.*
